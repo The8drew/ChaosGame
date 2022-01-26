@@ -37,7 +37,7 @@
             padding-left: 3px;
         }
 
-        #itr{
+        #box{
             position: fixed;
             left: 10px;
             bottom: 10px;
@@ -52,7 +52,10 @@
         <button id="set">set</button>
         <button id="clear">clear</button>
     </div>
-    <div id="itr">iterations : 0</div>
+    <div id="box">
+        <h4 id="parameters">...</h4>
+        <h4 id="itr">iterations : 0</h4>
+    </div>
     <canvas id="canvas"></canvas>
     <script>
         const iterations = document.getElementById("itr");
@@ -92,14 +95,17 @@
                     alert("You must enter something!")
                 } else if (amount < 3){
                     alert("amount range : ( 3 - inf )")
+                    document.querySelector("#amount").value = vertex;
                 } else if (step > 1){
-                    alert("step range : ( 0 - 1 )")
+                    alert("step range : (0 - 1)")
+                    document.querySelector("#step").value = t;
                 } else {
                     points = [];
                     vertex = amount;
                     t = step;
-                    console.log(vertex, t)
                 }
+
+                document.querySelector("#parameters").innerText = vertex + " | " + t;
             }
 
             document.querySelector("#clear").onclick = () => {
