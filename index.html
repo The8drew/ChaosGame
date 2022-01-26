@@ -47,7 +47,7 @@
 </head>
 <body>
     <div id="input">
-        <input id="amount" type="number" placeholder="amount">
+        <input id="amount" type="number" placeholder="amount" min="3">
         <input id="step" type="number" placeholder="step">
         <button id="set">set</button>
         <button id="clear">clear</button>
@@ -70,7 +70,7 @@
         let fpoint = {x: 0, y:0};
 
 
-        window.onload = () => {
+        window.onload = () => {            
             document.querySelector("#canvas").addEventListener("click", (e) => {
                 let mx = e.clientX
                 let my = e.clientY
@@ -90,10 +90,9 @@
                 if(amount == "" || step == ""){
                     alert("You must enter something!")
                 } else {
+                    points = [];
                     vertex = amount;
                     t = step;
-                    points = [];
-                    console.log(vertex, t)
                 }
             }
 
