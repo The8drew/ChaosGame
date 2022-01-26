@@ -48,7 +48,7 @@
 <body>
     <div id="input">
         <input id="amount" type="number" placeholder="amount" min="3">
-        <input id="step" type="number" placeholder="step">
+        <input id="step" type="number" placeholder="step" step="0.01" max="1">
         <button id="set">set</button>
         <button id="clear">clear</button>
     </div>
@@ -80,6 +80,7 @@
                 } else {
                     drawCircle(mx, my, 4, "white");
                     points = [{x: mx, y: my}];
+                    fpoint = {x: mx, y:my};
                     itr = 0;
                 }
 
@@ -89,10 +90,15 @@
 
                 if(amount == "" || step == ""){
                     alert("You must enter something!")
+                } else if (amount < 3){
+                    alert("amount range : ( 3 - inf )")
+                } else if (step > 1){
+                    alert("step range : ( 0 - 1 )")
                 } else {
                     points = [];
                     vertex = amount;
                     t = step;
+                    console.log(vertex, t)
                 }
             }
 
