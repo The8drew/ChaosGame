@@ -22,8 +22,8 @@
         }
 
         #input{
-            width: 100px;
-            height: 100px;
+            width: 110px;
+            height: 120px;
             position: absolute;
             display: flex;
             padding: 10px;
@@ -43,12 +43,18 @@
             bottom: 10px;
             color: white;
         }
+
+        h4{
+            font-weight: 100;
+        }
+
     </style>
 </head>
 <body>
     <div id="input">
         <input id="amount" type="number" placeholder="amount" min="3">
         <input id="step" type="number" placeholder="step" step="0.01" max="1">
+        <input id="restriction" type="number" placeholder="restrict" step="1">
         <button id="set">set</button>
         <button id="clear">clear</button>
     </div>
@@ -68,8 +74,10 @@
 
         let vertex = 3;
         let t = 0.5;
+        let r = 0;
         let itr = 0;
         let points = [];
+        let restrictedpoints = [];
         let fpoint = {x: 0, y:0};
 
 
@@ -90,27 +98,35 @@
             document.querySelector("#set").onclick = () => {
                 amount = document.querySelector("#amount").value;
                 step = document.querySelector("#step").value;
+                restriction = document.querySelector("#restriction").value;
 
-                if(amount == "" || step == ""){
+                if(amount == "" || step == "" || restriction == ""){
                     alert("You must enter something!")
                 } else if (amount < 3){
                     alert("amount range : ( 3 - inf )")
                     document.querySelector("#amount").value = vertex;
                 } else if (step > 1){
-                    alert("step range : (0 - 1)")
+                    alert("step range : ( 0 - 1 )")
                     document.querySelector("#step").value = t;
+                } else if (restriction > amount){
+                    alert("restriction range : ( 0 - amount )")
+                    document.querySelector("#restriction").value = r;
                 } else {
                     points = [];
+                    restrictedpoints = [];
                     vertex = amount;
                     t = step;
+                    r = restriction;
                 }
 
-                document.querySelector("#parameters").innerText = vertex + " | " + t;
+                document.querySelector("#parameters").innerText = vertex + " | " + t + " | " + r;
             }
 
             document.querySelector("#clear").onclick = () => {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
+                itr = 0;
                 points = [];
+                restrictedpoints = [];
             }
 
             });
@@ -123,14 +139,31 @@
                         itr ++;
                     }
                 }
-            }, 1000/500);
+            }, 1000/250);
             //Lopp }
         }
 
         //update {
         function update(array){
             drawCircle(fpoint.x, fpoint.y, 0.05, "white")
-            randompoint = array[Math.floor(Math.random()*array.length)]
+
+            //allowed points = points - restricted points
+            allowedpoints = array.filter((point) => {
+                return !restrictedpoints.includes(point);
+            })
+
+            
+            randomindex = Math.floor(Math.random()*allowedpoints.length);
+            randompoint = allowedpoints[randomindex];
+
+
+            restrictedpoints.push(randompoint);
+
+            if (restrictedpoints.length > r){
+                restrictedpoints.shift();
+            }
+            
+
             newx = fpoint.x * t + randompoint.x * (1 - t);
             newy = fpoint.y * t + randompoint.y * (1 - t);
             newpoint = {x: newx,y: newy};
